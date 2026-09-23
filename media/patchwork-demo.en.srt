@@ -1,0 +1,118 @@
+1
+00:00:00,350 --> 00:00:04,764
+This is Patchwork, an editorial workbench for a small,
+fictional museum.
+
+2
+00:00:04,814 --> 00:00:07,951
+Every story exists in English, Finnish and Spanish,
+
+3
+00:00:07,981 --> 00:00:12,328
+and it lives in a real Sanity project, whose ID you can see on
+screen.
+
+4
+00:00:13,080 --> 00:00:16,427
+The loom story is not ready. Four gates block it:
+
+5
+00:00:16,477 --> 00:00:22,457
+no image description, no summary, no access note, and a link
+that only says click here.
+
+6
+00:00:23,210 --> 00:00:26,396
+I load an authored suggestion. It is fixture copy;
+
+7
+00:00:26,446 --> 00:00:30,240
+no AI runs in the app. Saving sends one Sanity transaction,
+
+8
+00:00:30,270 --> 00:00:37,789
+guarded by the revision ID of every document it read, and the
+server reads the receipt back before it shows success.
+
+9
+00:00:38,530 --> 00:00:42,454
+Because English changed, Finnish and Spanish are now marked
+stale.
+
+10
+00:00:42,504 --> 00:00:46,307
+Each translation remembers the English revision it was based
+on.
+
+11
+00:00:46,357 --> 00:00:50,461
+These still match, so I confirm each one against English
+version two.
+
+12
+00:00:53,540 --> 00:00:59,548
+Next, a demo reviewer role, clearly labelled and not real
+authentication, approves each language.
+
+13
+00:00:59,598 --> 00:01:04,357
+Every approval stores a fingerprint of the exact content and
+source versions.
+
+14
+00:01:07,610 --> 00:01:11,847
+With three fresh approvals, the publisher writes a separate
+public edition.
+
+15
+00:01:11,897 --> 00:01:16,476
+Drafts live under the drafts path; the edition is an ordinary
+published document.
+
+16
+00:01:17,230 --> 00:01:20,773
+The visitor page reads only Sanity's published perspective.
+
+17
+00:01:20,823 --> 00:01:23,635
+Here is the loom story, in all three languages.
+
+18
+00:01:25,480 --> 00:01:30,852
+Anyone can check this without a token. This is the public
+dataset's query URL,
+
+19
+00:01:30,882 --> 00:01:34,207
+returning the same edition and its operation ID.
+
+20
+00:01:34,960 --> 00:01:38,017
+Back in the workbench, I correct the access evidence.
+
+21
+00:01:38,067 --> 00:01:40,326
+Every affected approval clears at once,
+
+22
+00:01:40,356 --> 00:01:45,638
+and the public edition stays exactly as it was, until someone
+reviews and publishes again.
+
+23
+00:01:46,420 --> 00:01:52,492
+The history keeps each change with its reason, its actor, and
+a full before and after snapshot.
+
+24
+00:01:52,542 --> 00:01:55,844
+Restoring creates a new draft. It never republishes.
+
+25
+00:01:56,590 --> 00:02:03,773
+The museum and its content are synthetic, and these checks are
+editorial prompts, not accessibility certification.
+
+26
+00:02:03,823 --> 00:02:07,453
+The code, tests and live verification notes are on GitHub.

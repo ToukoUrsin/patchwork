@@ -128,8 +128,11 @@ export function fromDocuments(rows: StoredDoc[]): Workspace {
     ),
   };
 }
-// Guard all previously read app documents, including unchanged source evidence.
-// The manifest provides an app-wide serializing lock. Per-document guards catch external edits.
+// Guard every decision input (manifest, entries, source evidence) with its read revision,
+// including unchanged ones: the manifest is an app-wide serializing lock and per-document
+// guards catch external edits. In Sanity every guarded patch writes a new _rev, so unchanged
+// public editions and append-only revision receipts are left untouched instead of rewritten.
+const immutableTypes = ["patchworkPublication", "patchworkRevision"];
 export function planTransaction(
   before: Workspace,
   after: Workspace,
@@ -153,6 +156,7 @@ export function planTransaction(
       continue;
     }
     const { _id, _type, ...fields } = next;
+    if (immutableTypes.includes(_type) && hash(next) === hash(oldDoc)) continue;
     mutations.push({ patch: { id, ifRevisionID: revs[id], set: fields } });
   }
   for (const [id, doc] of newDocs)

@@ -294,6 +294,10 @@ export default function Workbench() {
     freshApproval(current, l, workspace),
   ).length;
   const dirty = hash(form) !== hash(current.variants[locale].content);
+  // A translation that is still correct after an English edit is re-based by saving it unchanged.
+  const stale =
+    locale !== "en" &&
+    current.variants[locale].baseVersion !== current.variants.en.version;
   const publicEdition = workspace.publications.find(
     (p) => p.workflowId === current.id,
   );
@@ -866,13 +870,15 @@ export default function Workbench() {
                 <span />
                 {dirty
                   ? "Unsaved form changes"
-                  : isCloud
-                    ? "Saved Sanity revision"
-                    : "Saved local rehearsal"}
+                  : stale
+                    ? `Based on EN v${current.variants[locale].baseVersion}; English is v${current.variants.en.version}`
+                    : isCloud
+                      ? "Saved Sanity revision"
+                      : "Saved local rehearsal"}
               </span>
               <button
                 className="button dark"
-                disabled={busy || !dirty || actor !== "editor"}
+                disabled={busy || (!dirty && !stale) || actor !== "editor"}
                 onClick={() =>
                   void command({ type: "edit", locale, content: form })
                 }
@@ -882,7 +888,11 @@ export default function Workbench() {
                 ) : (
                   <Check size={14} />
                 )}{" "}
-                {isCloud ? "Save to Sanity" : "Save rehearsal"}
+                {!dirty && stale
+                  ? `Confirm against EN v${current.variants.en.version}`
+                  : isCloud
+                    ? "Save to Sanity"
+                    : "Save rehearsal"}
               </button>
             </div>
           </section>

@@ -1,6 +1,10 @@
 # Sanity setup and verification
 
-The source implements a real official-client integration. **No live account or dataset has been configured by the build subagent.** The campaign owner supplies the account and confirms live operation before calling the hackathon submission complete.
+Live project: **`f6kx9jxa`**, dataset **`production`** (public ACL). The full acceptance checklist below passed against it on September 22 PDT, 2026; evidence and two bugs it found are in [VALIDATION.md](VALIDATION.md). Public editions can be read without a token:
+
+<https://f6kx9jxa.api.sanity.io/v2026-09-21/data/query/production?query=*%5B_type%20%3D%3D%20%22patchworkPublication%22%5D>
+
+Draft entries, sources, receipts and the manifest live under `drafts.` and are not returned to anonymous queries.
 
 ## Configuration
 
@@ -18,7 +22,7 @@ npm install
 SANITY_STUDIO_PROJECT_ID=your_actual_id SANITY_STUDIO_DATASET=production npm run dev
 ```
 
-Studio runs on port3338. Public identifiers are not secrets. The write token remains in the parent app's server environment, not the Studio bundle. Every app document is read-only in this inspectable Studio configuration; workflow changes go through the authoring workbench. Studio validation is client-side, so the server also validates commands/content and enforces state transitions. Never claim the schema alone enforces those rules in Content Lake.
+Studio runs on port 3338 (not yet built or run against the live project). Public identifiers are not secrets. The write token remains in the parent app's server environment, not the Studio bundle. Every app document is read-only in this inspectable Studio configuration; workflow changes go through the authoring workbench. Studio validation is client-side, so the server also validates commands/content and enforces state transitions. Never claim the schema alone enforces those rules in Content Lake.
 
 ## Live acceptance checklist
 
@@ -31,7 +35,11 @@ Studio runs on port3338. Public identifiers are not secrets. The write token rem
 7. Use two open views or an independent client to produce a stale version/revision. Confirm409 conflict with no overwritten update.
 8. Withdraw the public edition. `/visit` no longer displays it; source and revision history remain.
 
-Do not record “Sanity integration verified” until these run against the actual project. The challenge requires a real project ID or public dataset URL in the DEV post. A suitable public query URL, after provisioning, is `https://PROJECT_ID.api.sanity.io/v2026-09-21/data/query/DATASET?query=*%5B_type%20%3D%3D%20%22patchworkPublication%22%5D`.
+All eight passed against `f6kx9jxa/production` (after two fixes found by step 5); see [VALIDATION.md](VALIDATION.md).
+
+## Transaction shape
+
+Every command is one transaction. The manifest, every entry and every source document are patched with `ifRevisionID` set to the revision the server just read, even when unchanged: the manifest serializes app writes and per-document guards catch out-of-band edits. New revision receipts and new public editions use `create`. Unchanged public editions and existing receipts are not written at all, because any guarded patch gives a document a new `_rev`; a public edition's `_rev` therefore only changes when it is published again.
 
 ## Official documentation checked
 

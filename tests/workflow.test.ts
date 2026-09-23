@@ -324,19 +324,38 @@ test("draft and publication document mapping round-trips without leaking interna
   );
   assert.equal(rows.find((d) => d._id === MANIFEST)!.workspaceHash, hash(w));
 });
-test("transaction guards all prior documents and uses create (not overwrite) for new operation receipts", () => {
+test("transaction guards all decision inputs, never rewrites unchanged editions or receipts, and uses create for new receipts", () => {
   const before = ready(),
     after = step(before, { type: "publish" }, "publisher");
   const revs = Object.fromEntries(
     documents(before).map((d) => [d._id, `rev-${d._id}`]),
   );
   const mutations = planTransaction(before, after, revs);
-  for (const d of documents(before)) {
-    const patch = mutations.find(
-      (m) => "patch" in m && "id" in m.patch && m.patch.id === d._id,
-    ) as { patch: { ifRevisionID: string } };
-    assert.equal(patch.patch.ifRevisionID, revs[d._id]);
-  }
+  const patchFor = (w: Mutation[], id: string) =>
+    w.find((m) => "patch" in m && "id" in m.patch && m.patch.id === id) as
+      | { patch: { ifRevisionID: string } }
+      | undefined;
+  for (const d of documents(before))
+    if (d._type === "patchworkRevision")
+      assert.equal(patchFor(mutations, d._id), undefined);
+    else
+      assert.equal(patchFor(mutations, d._id)?.patch.ifRevisionID, revs[d._id]);
+  // A later draft edit leaves the public edition document (and its _rev) alone.
+  const edited = step(after, {
+    type: "edit",
+    locale: "en",
+    content: { ...suggestedContent.lantern.en, summary: "A later draft." },
+  });
+  const afterRevs = Object.fromEntries(
+    documents(after).map((d) => [d._id, `rev-${d._id}`]),
+  );
+  assert.equal(
+    patchFor(
+      planTransaction(after, edited, afterRevs),
+      "patchwork-publication-lantern",
+    ),
+    undefined,
+  );
   assert.ok(
     mutations.some(
       (m) => "create" in m && m.create._type === "patchworkPublication",

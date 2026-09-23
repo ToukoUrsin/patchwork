@@ -1,6 +1,6 @@
 # Building a workflow instead of another content template
 
-Built from scratch on September21,2026, within the challenge's September18–October4 window. Substantial Codex assistance produced architecture, code, tests, synthetic fixture text, translations and vector artwork. No runtime inference service is used. These are candid development notes, not a curated transcript claiming unaided human authorship.
+Built from scratch on September21,2026, within the challenge's September18–October4 window. Substantial OpenAI Codex assistance produced architecture, code, tests, synthetic fixture text, translations and vector artwork. Claude assisted with the live Sanity acceptance run, the two fixes it found, the demo film and the write-up. No runtime inference service is used. These are candid development notes, not a curated transcript claiming unaided human authorship.
 
 The initial idea was a museum trail with accessible descriptions in three languages. A static “translation complete” badge would have hidden the hard part: translations and review decisions go stale when the English source or access evidence changes.
 
@@ -14,4 +14,6 @@ Lost network responses are another awkward boundary. A failed response does not 
 
 The UI treats disconnected rehearsal as a separate state. It can test editing and review flow with transparent demo roles, but publication stays disabled. It never falls back to a preview when a public dataset query fails. This constraint is more valuable than a polished false “published” toast.
 
-Next steps before submission: provision the real Sanity project through the campaign owner, run the live acceptance sequence, replace this pending status with actual sanitized evidence, review the UI in the integrated browser, capture a real film and screenshots, and publish an honest DEV post with the required project ID. No fake usage, independent human review or museum pilot is claimed.
+The live run against the real project (September 22, with Claude driving Playwright and the Sanity HTTP API) found two things the test double could not. First, Sanity gives a document a new `_rev` for every guarded patch, even an identical one, so the "guard everything" transaction was quietly rewriting the public edition on each draft edit. Decision inputs are still guarded on every write; unchanged editions and receipts are now left alone. Second, a translator whose text was still correct after an English edit had no way to say so without inventing a change; the save button now offers "Confirm against EN vN".
+
+The film, screenshots and DEV post were produced from that same live project. No fake usage, independent human review or museum pilot is claimed.
