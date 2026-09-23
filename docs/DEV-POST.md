@@ -1,11 +1,10 @@
 ---
 title: "Patchwork: translations that know when they're out of date, published through Sanity"
-published: false
+published: true
 tags: sanitychallenge, devchallenge, nextjs, webdev
 cover_image: https://raw.githubusercontent.com/ToukoUrsin/patchwork/main/media/02-published-workbench.png
 ---
 
-<!-- Paste-ready DEV post. Before publishing: replace {{VIDEO_URL}} with the uploaded film URL, then set published: true. -->
 
 _This is a submission for the [Sanity Challenge](https://dev.to/challenges/sanity-2026-09-16): Path Two, a Next.js app with Sanity as the backend._
 
@@ -25,7 +24,7 @@ The museum ("Fieldnote Museum"), its three stories, translations and access meas
 
 ## Demo
 
-{% embed {{VIDEO_URL}} %}
+{% embed https://youtu.be/yUKmSoR3Rdw %}
 
 The film (2:08) is the actual app running locally and writing to the real Sanity project. Every save, approval and publish in it is a real transaction.
 
